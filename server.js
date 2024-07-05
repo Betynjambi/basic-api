@@ -1,29 +1,29 @@
 const express = require('express');
-const axios = require('axios');
 const app = express();
-const port = process.env.PORT || 3000;  
+const port = process.env.PORT || 3000;
 
-app.get('/api/hello', async (req, res) => {
-    const visitorName = req.query.visitor_name || 'Guest';
-    const clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+// Helper function to get client IP
+const getClientIp = (req) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  return ip.includes('::') ? '127.0.0.1' : ip; // For simplicity, treating "::1" as "127.0.0.1"
+};
 
-    try {
-        // Simulated location and weather data for demonstration
-        const city = 'New York';
-        const temperature = 11;
+app.get('/api/hello', (req, res) => {
+  const visitorName = req.query.visitor_name || 'Guest';
+  const clientIp = getClientIp(req);
+  const location = 'New York';
+  const temperature = 11;
 
-        res.json({
-            client_ip: clientIp,
-            location: city,
-            greeting: `Hello, ${visitorName}! The temperature is ${temperature} degrees Celsius in ${city}.`
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'An error occurred' });
-    }
+  const response = {
+    client_ip: clientIp,
+    location: location,
+    greeting: `Hello, ${visitorName}!, the temperature is ${temperature} degrees Celsius in ${location}`
+  };
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(response, null, 2)); // Use JSON.stringify with indentation
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
-
-// api_key
