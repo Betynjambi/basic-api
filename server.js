@@ -10,7 +10,7 @@ const getClientIp = (req) => {
 
 app.get('/', (req, res) => {
   res.send('hello there!');
-}
+});
 
 app.get('/api/hello', (req, res) => {
   const visitorName = req.query.visitor_name || 'Guest';
