@@ -8,6 +8,10 @@ const getClientIp = (req) => {
   return ip.includes('::') ? '127.0.0.1' : ip; // For simplicity, treating "::1" as "127.0.0.1"
 };
 
+app.get('/', (req, res) => {
+  res.send('hello there!');
+}
+
 app.get('/api/hello', (req, res) => {
   const visitorName = req.query.visitor_name || 'Guest';
   const clientIp = getClientIp(req);
